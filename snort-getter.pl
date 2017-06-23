@@ -1,16 +1,18 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
-
 use LWP::Simple;
-my $url = "https://www.snort.org/downloads/community/md5s";
+
+my $hash_url = "https://www.snort.org/downloads/community/md5s";
 my $file_path = "snort-rules-version.txt";
 my $old_hash = "tkhrbi9a";
-my $content = get($url);
-
+my $content = get($hash_url);
+my $new_hash;
+my $rules_url = "https://www.snort.org/downloads/community/community-rules.tar.gz";
+my $rules_path = "community_rules.tar.gz";
 
 if($content =~ m/([\w\d]+)/){
-	my $new_hash = "$1";
+	$new_hash = "$1";
 }
 
 if (-e $file_path){
@@ -19,8 +21,14 @@ if (-e $file_path){
 	close(inFile);
 }
 
-if( $old_hash != $new_hash ){
+if($old_hash eq "" or $old_hash ne $new_hash ){
 	unlink $file_path;
 	open( outFile, '>', $file_path );
-	print filehandle "$new_hash";
+	print outFile "$new_hash";
+	close(outFile);
+	if( -e $rules_path ){
+		unlink $rules_path;
+	}
+	getstore($rules_url,$rules_path);
 }
+
