@@ -5,7 +5,7 @@ use LWP::Simple;
 
 my $hash_url = "https://www.snort.org/downloads/community/md5s";
 my $file_path = "snort-rules-version.txt";
-my $old_hash = "tkhrbi9a";
+my $old_hash = "";
 my $content = get($hash_url);
 my $new_hash;
 my $rules_url = "https://www.snort.org/downloads/community/community-rules.tar.gz";
